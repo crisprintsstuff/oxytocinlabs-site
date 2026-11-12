@@ -1,24 +1,30 @@
-# Oxytocin Labs website: nginx serves the site, cloudflared connects it to
-# Cloudflare through a tunnel. Nothing listens on the host's network.
+# Oxytocin Labs website: nginx serving the site on this machine's loopback
+# address, for a Cloudflare Tunnel to route to.
 #
-#   cp .env.example .env    # then paste your tunnel token into .env
+# Using a cloudflared that already runs on this host (the usual setup):
+#   cp .env.example .env     # optional: change SITE_PORT
 #   docker compose up -d --build
+#   then route oxytocin.tools to http://localhost:8080 in your tunnel (README)
+#
+# Or let Compose run its own tunnel too: set CLOUDFLARE_TUNNEL_TOKEN in .env
+# and start with: docker compose --profile tunnel up -d --build
 
 services:
   web:
     build: .
     restart: unless-stopped
-    # No published ports: only the tunnel reaches the site. To look at it
-    # on this machine without the tunnel, uncomment:
-    # ports:
-    #   - "127.0.0.1:8080:80"
+    # Loopback only: reachable from this machine (your cloudflared), never
+    # from the network.
+    ports:
+      - "127.0.0.1:${SITE_PORT:-8080}:80"
 
   tunnel:
+    profiles: ["tunnel"]
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
     command: tunnel --no-autoupdate run
     environment:
-      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN:?Set CLOUDFLARE_TUNNEL_TOKEN in .env (see README)}
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN:-}
     depends_on:
       web:
         condition: service_healthy
