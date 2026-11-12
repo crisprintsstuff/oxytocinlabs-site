@@ -2,7 +2,7 @@
 
 The website of **Oxytocin Labs** at [oxytocin.tools](https://oxytocin.tools/). It's a single static page with the apps, an about section and the Discord link, styled like the OxyBrush site.
 
-The site is plain HTML, CSS and a few lines of JavaScript, with no build step. nginx serves it in Docker, and a Cloudflare Tunnel connects it to the internet, so your server needs no open ports.
+The site is plain HTML, CSS and a few lines of JavaScript, with no build step. nginx serves it in Docker on this machine's loopback address, and your Cloudflare Tunnel routes `oxytocin.tools` to it, so your server opens no ports.
 
 ```
 site/                 the website (edit these files)
@@ -13,31 +13,61 @@ site/                 the website (edit these files)
   favicon.svg, robots.txt, sitemap.xml
 nginx.conf            caching, security headers, real visitor IPs from Cloudflare
 Dockerfile            nginx image with the site inside
-docker-compose.yml    web (nginx) + tunnel (cloudflared)
-.env.example          template for your tunnel token
+docker-compose.yml    web (nginx on 127.0.0.1:8080); optional tunnel (cloudflared)
+.env.example          port setting, optional tunnel token
 ```
 
 ## Run it on your server
 
-You need Docker with the Compose plugin, and the `oxytocin.tools` domain on your Cloudflare account.
+You need Docker with the Compose plugin, `oxytocin.tools` added to the same Cloudflare account as your tunnel, and `cloudflared` already running on the host as a service.
 
-1. **Create the tunnel.** In the [Cloudflare dashboard](https://one.dash.cloudflare.com/), go to **Zero Trust > Networks > Tunnels > Create a tunnel**. Choose **Cloudflared**, name it (for example `oxytocin-site`), and pick **Docker** as the environment. Copy the token: the long string after `--token` in the command it shows. You don't need to run that command.
-2. **Route the domain to the site.** In the tunnel's **Public Hostname** tab, add a hostname:
-   - **Domain:** `oxytocin.tools`, with **Subdomain** empty.
-   - **Service:** type `HTTP`, URL `web:80`. `web` is the nginx container's name inside Compose.
-
-   Add a second hostname with **Subdomain** `www` and the same service, if you want `www.oxytocin.tools` to work too.
-3. **Start it:**
+1. **Start the site:**
 
    ```bash
    git clone https://github.com/crisprintsstuff/oxytocinlabs-site.git
    cd oxytocinlabs-site
-   cp .env.example .env
-   nano .env            # paste the token after CLOUDFLARE_TUNNEL_TOKEN=
    docker compose up -d --build
    ```
 
-4. **Check it:** `docker compose ps` should list both containers, with `web` marked **healthy**. The tunnel shows as **Healthy** in the dashboard, and https://oxytocin.tools/ loads.
+   It listens on `127.0.0.1:8080`, which only this machine can reach. If 8080 is taken, run `cp .env.example .env`, change `SITE_PORT`, and run the `up` command again. Check it with `curl -I http://localhost:8080/`, which should answer `HTTP/1.1 200 OK`.
+
+2. **Route the domain in your existing tunnel.** It already serves other things; you only add a route next to them. How you add it depends on where the tunnel's settings live.
+
+   - **Managed in the dashboard** (installed with a token): in [Zero Trust](https://one.dash.cloudflare.com/) go to **Networks > Tunnels**, open your tunnel, then **Public Hostname** (or **Published application routes**) and **Add**:
+     - **Subdomain:** empty. **Domain:** `oxytocin.tools`.
+     - **Service:** `HTTP`, URL `localhost:8080`, or your `SITE_PORT`.
+
+     Add another with **Subdomain** `www` if you want `www.oxytocin.tools` too. Cloudflare creates the DNS records itself. If `oxytocin.tools` already has an A or CNAME record, delete it first, or the route can't be added.
+
+   - **Managed in a config file** (`/etc/cloudflared/config.yml` or `~/.cloudflared/config.yml`): add the hostname above the final catch-all rule:
+
+     ```yaml
+     ingress:
+       # ...your existing rules...
+       - hostname: oxytocin.tools
+         service: http://localhost:8080
+       - hostname: www.oxytocin.tools
+         service: http://localhost:8080
+       - service: http_status:404    # keep the catch-all last
+     ```
+
+     Then create the DNS records and restart the service, using your tunnel's name:
+
+     ```bash
+     cloudflared tunnel route dns <your-tunnel> oxytocin.tools
+     cloudflared tunnel route dns <your-tunnel> www.oxytocin.tools
+     sudo systemctl restart cloudflared
+     ```
+
+3. **Check it:** https://oxytocin.tools/ loads, and your other routes still work.
+
+### Without a tunnel on the host
+
+To have Compose run its own `cloudflared` instead:
+
+1. Create a tunnel in the dashboard and put its token in `.env` as `CLOUDFLARE_TUNNEL_TOKEN`.
+2. Route the hostname to `http://web:80`.
+3. Start with `docker compose --profile tunnel up -d --build`.
 
 ## Update the site
 
@@ -50,7 +80,7 @@ docker compose up -d --build
 
 Pages are re-checked on every visit, so changes show up immediately. CSS, JavaScript and images are cached for up to a week, so after changing `style.css` or `main.js` it can take a hard refresh (or a Cloudflare cache purge) to see them.
 
-To look at the site locally without the tunnel, uncomment the `ports:` lines in `docker-compose.yml` and open http://localhost:8080/. Or, with Python installed, run `python3 -m http.server -d site` and open http://localhost:8000/.
+To look at the site on the server itself, open http://localhost:8080/. On another computer, run `python3 -m http.server -d site` in the repository and open http://localhost:8000/.
 
 ## Editing notes
 
