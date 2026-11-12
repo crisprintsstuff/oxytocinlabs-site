@@ -1,0 +1,24 @@
+# Oxytocin Labs website: nginx serves the site, cloudflared connects it to
+# Cloudflare through a tunnel. Nothing listens on the host's network.
+#
+#   cp .env.example .env    # then paste your tunnel token into .env
+#   docker compose up -d --build
+
+services:
+  web:
+    build: .
+    restart: unless-stopped
+    # No published ports: only the tunnel reaches the site. To look at it
+    # on this machine without the tunnel, uncomment:
+    # ports:
+    #   - "127.0.0.1:8080:80"
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN:?Set CLOUDFLARE_TUNNEL_TOKEN in .env (see README)}
+    depends_on:
+      web:
+        condition: service_healthy
