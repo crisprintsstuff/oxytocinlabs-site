@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oxytocin Labs: creative and practical software, made in the open</title>
+  <meta name="description" content="Oxytocin Labs makes OxyBrush, OxyCharacter, OxyLayer, OxyPixel and more: 3D sculpting, character, image and pixel-art tools, plus utilities for developers and communities.">
+  <link rel="canonical" href="https://oxytocin.tools/">
+  <meta name="theme-color" content="#050505">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://oxytocin.tools/">
+  <meta property="og:title" content="Oxytocin Labs">
+  <meta property="og:description" content="Creative and practical software, made in the open: OxyBrush, OxyCharacter, OxyLayer, OxyPixel and more.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <!-- Icons used on the page (shapes from Lucide, ISC license). -->
+  <svg class="sprite" aria-hidden="true">
+    <symbol id="i-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><circle cx="12" cy="12" r="2"/><path d="M16.5 7.5l-3 3"/><path d="M10.5 13.5l-3 3"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-brush" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/><path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z"/></symbol>
+    <symbol id="i-person" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 2 6-2"/><path d="M12 10v4"/></symbol>
+    <symbol id="i-convert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></symbol>
+    <symbol id="i-bot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></symbol>
+    <symbol id="i-github" viewBox="0 0 16 16" fill="currentColor"><path d="M6.766 11.328c-2.063-.25-3.516-1.734-3.516-3.656 0-.781.281-1.625.75-2.188-.203-.515-.172-1.609.063-2.062.625-.078 1.468.25 1.968.703.594-.187 1.219-.281 1.985-.281.765 0 1.39.094 1.953.265.484-.437 1.344-.765 1.969-.687.218.422.25 1.515.046 2.047.5.593.766 1.39.766 2.203 0 1.922-1.453 3.375-3.547 3.64.531.344.89 1.094.89 1.954v1.625c0 .468.391.734.86.547C13.781 14.359 16 11.53 16 8.03 16 3.61 12.406 0 7.984 0 3.563 0 0 3.61 0 8.031a7.88 7.88 0 0 0 5.172 7.422c.422.156.828-.125.828-.547v-1.25c-.219.094-.5.156-.75.156-1.031 0-1.64-.562-2.078-1.609-.172-.422-.36-.672-.719-.719-.187-.015-.25-.093-.25-.187 0-.188.313-.328.625-.328.453 0 .844.281 1.25.86.313.452.64.655 1.031.655s.641-.14 1-.5c.266-.265.47-.5.657-.656"/></symbol>
+  </svg>
+
+  <a class="skip" href="#main">Skip to content</a>
+
+  <div class="ambient" aria-hidden="true">
+    <div class="blob pink"></div>
+    <div class="blob purple"></div>
+    <div class="blob blue"></div>
+  </div>
+
+  <header class="top glass">
+    <div class="wrap">
+      <a class="brand" href="/" aria-label="Oxytocin Labs home">
+        <span class="logo"><span><svg width="20" height="20" aria-hidden="true"><use href="#i-logo"/></svg></span></span>
+        Oxytocin Labs
+      </a>
+      <nav class="links" aria-label="Main">
+        <a href="#apps">Apps</a>
+        <a href="#about">About</a>
+        <a href="#community">Community</a>
+      </nav>
+      <div class="actions">
+        <a class="icon-btn glass" href="https://discord.gg/Vfm7Km7xvG" target="_blank" rel="noopener noreferrer" title="Join the Oxytocin Labs Discord" aria-label="Oxytocin Labs on Discord"><svg aria-hidden="true"><use href="#i-chat"/></svg></a>
+        <a class="icon-btn glass" href="https://github.com/crisprintsstuff" target="_blank" rel="noopener noreferrer" title="GitHub" aria-label="Oxytocin Labs on GitHub"><svg aria-hidden="true"><use href="#i-github"/></svg></a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section class="hero">
+      <div class="wrap">
+        <span class="pill"><span class="dot"></span>Independent software studio</span>
+        <h1>Tools made with <span class="text-gradient">care</span>.</h1>
+        <p class="lead">Oxytocin Labs builds creative and practical software: 3D sculpting and character tools, image and pixel-art editors, and utilities for developers and communities. Most of it is written in Rust, and all of it is developed in the open on GitHub.</p>
+        <div class="cta">
+          <a class="btn primary large" href="#apps">Browse the apps <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="btn ghost glass large" href="https://discord.gg/Vfm7Km7xvG" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-chat"/></svg>Join the Discord</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="apps">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">The apps</div>
+            <h2>Everything we make</h2>
+          </div>
+          <p>Each app has its own repository with downloads, a changelog and a place to report issues.</p>
+        </div>
+        <div class="filters" role="group" aria-label="Filter apps">
+          <button type="button" data-filter="all" aria-pressed="true">All</button>
+          <button type="button" data-filter="3d" aria-pressed="false">3D</button>
+          <button type="button" data-filter="2d" aria-pressed="false">2D &amp; art</button>
+          <button type="button" data-filter="dev" aria-pressed="false">Developer tools</button>
+          <button type="button" data-filter="util" aria-pressed="false">Utilities</button>
+        </div>
+        <div class="grid">
+          <article class="card glass t-pink" data-category="3d">
+            <div class="icon glass"><svg aria-hidden="true"><use href="#i-brush"/></svg></div>
+            <div>
+              <div class="tag">3D sculpting</div>
+              <h3>OxyBrush</h3>
+            </div>
+            <p>Sculpt 3D models like digital clay: subdivision levels, dynamic detail, retopology, vertex color and posing, with glTF, OBJ, STL and PLY export.</p>
+            <div class="links">
+              <a href="https://github.com/crisprintsstuff/OxyBrush" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+              <a href="https://github.com/crisprintsstuff/OxyBrush/releases" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-down"/></svg>Releases</a>
+            </div>
+          </article>
+          <article class="card glass t-purple" data-category="3d">
+            <div class="icon glass"><svg aria-hidden="true"><use href="#i-person"/></svg></div>
+            <div>
+              <div class="tag">3D characters</div>
+              <h3>OxyCharacter</h3>
+            </div>
+            <p>Parametric character creator: shape a base human with sliders, refit its skeleton automatically, dress it, and export a rigged glTF.</p>
+            <div class="links">
+              <a href="https://github.com/crisprintsstuff/OxyCharacter" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+            </div>
+          </article>
+          <article class="card glass t-blue" data-category="dev">
+            <div class="icon glass"><svg aria-hidden="true"><use href="#i-convert"/></svg></div>
+            <div>
+              <div class="tag">Pipeline tool</div>
+              <h3>OxyConvert</h3>
+            </div>
+            <p>Desktop studio and command-line tool that turns scripts, macros and plugins from other sculpting tools into OxyBrush plugins.</p>
+            <div class="links">
+              <a href="https://github.com/crisprintsstuff/OxyConvert" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+              <a href="https://github.com/crisprintsstuff/OxyConvert/releases" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-down"/></svg>Releases</a>
+            </div>
+          </article>
+          <article class="card glass t-pink" data-category="2d">
+            <div class="icon glass"><svg aria-hidden="true"><use href="#i-layers"/></svg></div>
+            <div>
+              <div class="tag">Image editing</div>
+              <h3>OxyLayer</h3>
+            </div>
+            <p>Non-destructive, layer-based image editor and digital art suite, written in Rust.</p>
+            <div class="links">
+              <a href="https://github.com/crisprintsstuff/oxylayer" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+            </div>
+          </article>
+          <article class="card glass t-purple" data-category="2d">
+            <div class="icon glass"><svg aria-hidden="true"><use href="#i-grid"/></svg></div>
+            <div>
+              <div class="tag">Pixel art</div>
+              <h3>OxyPixel</h3>
+            </div>
+            <p>Pixel-art editor for sprites and short animations: layers, frames and animation tags, with PNG, GIF and spritesheet export.</p>
+            <div class="links">
+              <a href="https://github.com/crisprintsstuff/oxypixel" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+              <a href="https://github.com/crisprintsstuff/oxypixel/releases" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-down"/></svg>Releases</a>
+            </div>
+          </article>
+          <article class="card glass t-blue" data-category="dev">
+            <div class="icon glass"><svg aria-hidden="true"><use href="#i-book"/></svg></div>
+            <div>
+              <div class="tag">Documentation</div>
+              <h3>OxyBook</h3>
+            </div>
+            <p>Self-hostable documentation platform where the git repository is the source of truth: edit pages in the browser, and every change becomes a pull request.</p>
+            <div class="links">
+              <a href="https://github.com/crisprintsstuff/OxyBook" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+              <a href="https://github.com/crisprintsstuff/OxyBook/releases" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-down"/></svg>Releases</a>
+            </div>
+          </article>
+          <article class="card glass t-pink" data-category="dev">
+            <div class="icon glass"><svg aria-hidden="true"><use href="#i-bot"/></svg></div>
+            <div>
+              <div class="tag">Discord bot</div>
+              <h3>OxytocinTools</h3>
+            </div>
+            <p>Discord bot that posts your GitHub releases, commits, issues and pull requests to the channels you choose, and files issues from Discord.</p>
+            <div class="links">
+              <a href="https://github.com/crisprintsstuff/OxytocinTools" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+            </div>
+          </article>
+          <article class="card glass t-purple" data-category="util">
+            <div class="icon glass"><svg aria-hidden="true"><use href="#i-download"/></svg></div>
+            <div>
+              <div class="tag">Utility</div>
+              <h3>OxyDL</h3>
+            </div>
+            <p>Lightweight, multi-connection download manager written in Rust.</p>
+            <div class="links">
+              <a href="https://github.com/crisprintsstuff/oxydl" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="wrap split">
+        <!-- EDIT ME: replace this paragraph with your own story when you're ready. -->
+        <div class="panel glass">
+          <div class="eyebrow">About</div>
+          <h2>Small studio, <span class="text-gradient">open work</span></h2>
+          <p>Oxytocin Labs is an independent studio making tools for people who create: sculptors, artists, writers and the communities around them. Every app is built in public, shaped by its testers, and released early and often.</p>
+          <ul class="values">
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span><strong>Made in the open.</strong> Code, issues and releases all live on GitHub.</span></li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span><strong>Native and fast.</strong> Most apps are written in Rust and run on your own machine.</span></li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span><strong>Shaped by testers.</strong> Feedback comes in through GitHub issues and Discord.</span></li>
+          </ul>
+        </div>
+        <div id="community" class="panel glass community">
+          <div class="badge glass"><svg aria-hidden="true"><use href="#i-chat"/></svg></div>
+          <h3>Join the community</h3>
+          <p>Ask questions, share what you made, try the betas first and tell us what to build next.</p>
+          <a class="btn primary" href="https://discord.gg/Vfm7Km7xvG" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-chat"/></svg>Join the Discord</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span class="logo"><span><svg width="20" height="20" aria-hidden="true"><use href="#i-logo"/></svg></span></span>
+      <nav class="links" aria-label="Footer">
+        <a href="#apps">Apps</a>
+        <a href="https://discord.gg/Vfm7Km7xvG" target="_blank" rel="noopener noreferrer">Discord</a>
+        <a href="https://github.com/crisprintsstuff" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </nav>
+      <small>&copy; <span id="year">2026</span> Oxytocin Labs</small>
+    </div>
+  </footer>
+
+  <script src="/main.js" defer></script>
+</body>
+</html>
